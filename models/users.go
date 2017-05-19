@@ -1,11 +1,11 @@
 package models
 
-// Model Struct
+// Users - Model for the uses table
 type Users struct {
-	User_id  int    `orm:"auto"`
-	Email    string `orm:"size(254)"`
-	Token    string `orm:"size(254)"`
-	Username string `orm:"size(254)"`
-	Bio      string `orm:"size(254)"`
-	Image    string `orm:"size(254)"`
+	UserId   int    `orm:"auto"`
+	Email    string `orm:"size(128)"`
+	Password string `orm:"size(64)"`
+	UserName string `orm:"size(32)"`
+	Bio      string `orm:"size(256);null"`
+	Image    string `orm:"size(256);null"`
 }
