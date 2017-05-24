@@ -1,24 +1,24 @@
 package handlers
 
 import (
-	"github.com/gin-gonic/gin"
+	"fmt"
+	"net/http"
+
 	"github.com/aravind741/Go-Gin-Crud/models"
 	"github.com/astaxie/beego/orm"
-	"net/http"
-	"fmt"
+	"github.com/gin-gonic/gin"
 )
 
-/* ORM - Global ORM object for the handler package*/
+// ORM - Global ORM object for the handler package
 var ORM orm.Ormer
 
-/*LoginRequest - Login JSON request format*/
+// LoginRequest - Login JSON request format
 type LoginRequest struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
 
-/*TODO build a JSON response generator*/
-/*LoginHandler - Handler function for the login route*/
+// LoginHandler - Handler function for the login route
 func LoginHandler(c *gin.Context) {
 	var user []models.Users
 	var loginRequest LoginRequest
@@ -29,7 +29,7 @@ func LoginHandler(c *gin.Context) {
 			"message": "User does not exist"})
 	} else {
 		if decryptedPass, _ := decrypt(user[0].Password); decryptedPass == loginRequest.Password {
-			if token, err := generateJWT(user[0].UserId); err != nil {
+			if token, err := generateJWT(user[0].UserID); err != nil {
 				fmt.Println("Failed to generate the JWT Token:", err)
 				c.JSON(http.StatusInternalServerError, gin.H{"status": http.StatusInternalServerError,
 					"message": "Failed to generate JWT Token"})
