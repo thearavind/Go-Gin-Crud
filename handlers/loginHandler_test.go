@@ -5,7 +5,7 @@ import (
 	"bytes"
 	"net/http/httptest"
 	"testing"
-	"../router"
+	"github.com/aravind741/Go-Gin-Crud/router"
 	"encoding/json"
 )
 

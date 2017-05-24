@@ -2,8 +2,8 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"../models"
-	"../handlers"
+	"github.com/aravind741/Go-Gin-Crud/models"
+	"github.com/aravind741/Go-Gin-Crud/handlers"
 )
 
 /* GetMainEngine - Creates the gin instance and returns it so that it can be used for dev and testing */

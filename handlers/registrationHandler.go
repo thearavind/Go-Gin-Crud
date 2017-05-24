@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"github.com/gin-gonic/gin"
-	"../models"
+	"github.com/aravind741/Go-Gin-Crud/models"
 	"net/http"
 	"fmt"
 )

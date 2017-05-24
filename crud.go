@@ -1,7 +1,7 @@
 package main
 
 import (
-	"./router"
+	"github.com/aravind741/Go-Gin-Crud/router"
 	_ "github.com/lib/pq"
 )
 

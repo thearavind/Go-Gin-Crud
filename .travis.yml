@@ -8,3 +8,4 @@ install:
   - go get github.com/lib/pq
   - go get github.com/astaxie/beego/orm
   - go get github.com/dgrijalva/jwt-go
+  
