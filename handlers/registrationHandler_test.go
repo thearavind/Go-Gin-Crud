@@ -5,8 +5,6 @@ import (
 	"bytes"
 	"net/http/httptest"
 	"testing"
-	"encoding/json"
-	"../models"
 )
 
 type RegistrationResponse struct {
