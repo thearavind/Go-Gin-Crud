@@ -1,9 +1,8 @@
 package models
 
-/* Users - Model for the uses table*/
-/*Todo remove token from DB*/
+// Users - Model for the uses table
 type Users struct {
-	UserId  int    `orm:"auto"`
+	UserID   int    `orm:"auto"`
 	Email    string `orm:"size(128)"`
 	Password string `orm:"size(64)"`
 	UserName string `orm:"size(32)"`
