@@ -1,21 +1,20 @@
 package handlers
 
 import (
-	"fmt"
-	"net/http"
-
-	"github.com/aravind741/Go-Gin-Crud/models"
 	"github.com/gin-gonic/gin"
+	"github.com/aravind741/Go-Gin-Crud/models"
+	"net/http"
+	"fmt"
 )
 
-// RegistrationRequest - Registration request parameter format
+/* RegistrationRequest - Registration request parameter format*/
 type RegistrationRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-	UserName string `json:"user_name"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
+	User_name string `json:"user_name"`
 }
 
-// RegistrationHandler - Encrypts the new users password and stores user details in the DB
+/* RegistrationHandler - Encrypts the new users password and stores user details in the DB*/
 func RegistrationHandler(c *gin.Context) {
 	var regRequest RegistrationRequest
 	c.BindJSON(&regRequest)
@@ -28,13 +27,13 @@ func RegistrationHandler(c *gin.Context) {
 		} else {
 			newUser := models.Users{
 				Email:    regRequest.Email,
-				UserName: regRequest.UserName,
+				UserName: regRequest.User_name,
 				Password: encryptedPassword,
 			}
 			_, err = ORM.Insert(&newUser)
 			if err == nil {
 				c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "email": newUser.Email,
-					"user_name": newUser.UserName, "user_id": newUser.UserID})
+					"user_name": newUser.UserName, "user_id": newUser.UserId})
 			}
 		}
 	}
@@ -48,6 +47,7 @@ func validateNewUser(userEmail string, c *gin.Context) (s bool) {
 		c.JSON(http.StatusConflict, gin.H{"status": http.StatusConflict,
 			"message": "User has been registered already"})
 		return false
+	} else {
+		return true
 	}
-	return true
 }

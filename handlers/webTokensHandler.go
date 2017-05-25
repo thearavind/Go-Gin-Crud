@@ -1,22 +1,21 @@
 package handlers
 
 import (
-	"errors"
-	"net/http"
-	"time"
-
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"errors"
+	"time"
+	"net/http"
 )
 
-// claims - JWT claims object
+/* claims - JWT claims object*/
 type claims struct {
-	UserID int `json:"user_id"`
+	UserId int `json:"user_id"`
 	jwt.StandardClaims
 }
 
-// generateJWT - Generates the JWT token with custom expiry time and user id
-func generateJWT(user int) (string, error) {
+/* generateJWT - Generates the JWT token with custom expiry time and user id*/
+func generateJWT(user int) (Jwt string, err error) {
 	mySigningKey := []byte("secret*#key#*for*#AES&encryption")
 	claims := claims{
 		user,
@@ -33,19 +32,21 @@ func generateJWT(user int) (string, error) {
 	return signedString, nil
 }
 
-// validateJWT - validate the JWT token and parse the user_id from the token
-func validateJWT(webToken string, c *gin.Context) bool {
+/* validateJWT - validate the JWT token and parse the user_id from the token*/
+func validateJWT(webToken string, c *gin.Context) (valid bool) {
 	parsedToken, _ := jwt.ParseWithClaims(webToken, &claims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte("secret*#key#*for*#AES&encryption"), nil
 	})
 	if claims, ok := parsedToken.Claims.(*claims); ok && parsedToken.Valid {
-		c.Set("user_id", claims.UserID)
+		c.Set("user_id", claims.UserId)
 		return true
+	} else {
+		return false
 	}
-	return false
 }
 
-// TokenValidator - gin middleware function to validate the jwt tokens in the incoming requests
+/* TODO check for the auth token the json request also */
+/* TokenValidator - gin middleware function to validate the jwt tokens in the incoming requests*/
 func TokenValidator() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if !validateJWT(c.Request.Header.Get("Authorization"), c) {
@@ -54,10 +55,9 @@ func TokenValidator() gin.HandlerFunc {
 				"message": "Auth token is invalid"})
 			c.Abort()
 			return
+		} else {
+			c.Set("token", c.Request.Header.Get("Authorization"))
+			c.Next()
 		}
-		c.Set("token", c.Request.Header.Get("Authorization"))
-		c.Next()
 	}
 }
-
-/* TODO check for the auth token the json request also */
