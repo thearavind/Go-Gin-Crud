@@ -1,17 +1,17 @@
 package handlers
 
 import (
-	"bytes"
 	"net/http"
+	"bytes"
 	"net/http/httptest"
 	"testing"
 )
 
 type RegistrationResponse struct {
-	Status   int    `json:"status"`
+	Status   int `json:"status"`
 	Email    string `json:"email"`
 	UserName string `json:"user_name"`
-	UserID   int    `json:"user_id"`
+	UserId   int `json:"user_id"`
 }
 
 func TestRegistrationHandler(test *testing.T) {
@@ -22,12 +22,12 @@ func TestRegistrationHandler(test *testing.T) {
 		response := httptest.NewRecorder()
 		Router.ServeHTTP(response, request)
 		if response.Code != http.StatusConflict {
-			t.Errorf("Invalid response code: %d", response.Code)
+			t.Errorf("Invalid response code: %s", response.Code)
 		}
 	})
 
 	/* TODO fix the bug in delete new user*/
-	/*	test.Run("Registering a new user to the DB", func(t *testing.T) {
+/*	test.Run("Registering a new user to the DB", func(t *testing.T) {
 		var regResponse RegistrationResponse
 		params := []byte(`{"email":"aravind@india.com", "password": "Password", "user_name": "Aravindhan"}`)
 		request, _ := http.NewRequest("POST", "/api/users", bytes.NewBuffer(params))
@@ -40,7 +40,7 @@ func TestRegistrationHandler(test *testing.T) {
 		if err := json.NewDecoder(response.Body).Decode(&regResponse); err != nil {
 			t.Errorf("Failed to decode the json response %s", err)
 		} else {
-			data := models.Users{UserID: regResponse.UserID}
+			data := models.Users{UserId: regResponse.UserId}
 			_ = ORM.Read(&data)
 			if _, err := ORM.Delete(&data); err != nil {
 				t.Errorf("Failed to delete the new user from the DB %s", err)
