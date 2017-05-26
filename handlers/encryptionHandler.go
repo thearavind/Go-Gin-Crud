@@ -9,7 +9,7 @@ import (
 	"io"
 )
 
-/* Takes in a string and returns AES Encrypted and base64 Encoded string */
+// Takes in a string and returns AES Encrypted and base64 Encoded string
 func encrypt(rawString []byte) (string, error) {
 	/*TODO move this to env variable*/
 	cipherBlock, err := aes.NewCipher([]byte("secret*#key#*for*#AES&encryption"))
@@ -27,7 +27,7 @@ func encrypt(rawString []byte) (string, error) {
 	return base64.StdEncoding.EncodeToString(cipherText), nil
 }
 
-/* Takes in the encrypted string and returns the decrypted text */
+// Takes in the encrypted string and returns the decrypted text
 func decrypt(encryptedString string) (string, error) {
 	cipherBlock, err := aes.NewCipher([]byte("secret*#key#*for*#AES&encryption"))
 	if err != nil {

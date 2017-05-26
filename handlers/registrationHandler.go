@@ -1,20 +1,21 @@
 package handlers
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/aravind741/Go-Gin-Crud/models"
-	"net/http"
 	"fmt"
+	"net/http"
+
+	"github.com/aravind741/Go-Gin-Crud/models"
+	"github.com/gin-gonic/gin"
 )
 
-/* RegistrationRequest - Registration request parameter format*/
+// RegistrationRequest - Registration request parameter format
 type RegistrationRequest struct {
-	Email     string `json:"email"`
-	Password  string `json:"password"`
-	User_name string `json:"user_name"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+	UserName string `json:"user_name"`
 }
 
-/* RegistrationHandler - Encrypts the new users password and stores user details in the DB*/
+// RegistrationHandler - Encrypts the new users password and stores user details in the DB
 func RegistrationHandler(c *gin.Context) {
 	var regRequest RegistrationRequest
 	c.BindJSON(&regRequest)
@@ -27,7 +28,7 @@ func RegistrationHandler(c *gin.Context) {
 		} else {
 			newUser := models.Users{
 				Email:    regRequest.Email,
-				UserName: regRequest.User_name,
+				UserName: regRequest.UserName,
 				Password: encryptedPassword,
 			}
 			_, err = ORM.Insert(&newUser)
@@ -39,7 +40,7 @@ func RegistrationHandler(c *gin.Context) {
 	}
 }
 
-/* validateNewUser - Checks weather the users email_id is already present in the database*/
+// validateNewUser - Checks weather the users email_id is already present in the database
 func validateNewUser(userEmail string, c *gin.Context) (s bool) {
 	var queryUsers []models.Users
 	ORM.QueryTable("users").Filter("email__exact", userEmail).All(&queryUsers)
@@ -47,7 +48,6 @@ func validateNewUser(userEmail string, c *gin.Context) (s bool) {
 		c.JSON(http.StatusConflict, gin.H{"status": http.StatusConflict,
 			"message": "User has been registered already"})
 		return false
-	} else {
-		return true
 	}
+	return true
 }

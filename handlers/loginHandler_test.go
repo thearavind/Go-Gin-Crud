@@ -1,23 +1,26 @@
 package handlers
 
 import (
-	"net/http"
 	"bytes"
+	"encoding/json"
+	"net/http"
 	"net/http/httptest"
 	"testing"
-	"github.com/aravind741/Go-Gin-Crud/router"
-	"encoding/json"
+
+	"github.com/aravind741/Go-Gin-Crud/models"
+	"github.com/aravind741/Go-Gin-Crud/router/route_provider"
 )
 
 type LoginResponse struct {
-	Status   int `json:"status"`
+	Status   int    `json:"status"`
 	Email    string `json:"email"`
 	UserName string `json:"user_name"`
 	Token    string `json:"token"`
 }
 
 var AuthToken string
-var Router = router.GetMainEngine()
+var Router = provider.ProvideRouter()
+var orM = models.GetOrmObject()
 
 func TestLoginHandler(test *testing.T) {
 	test.Run("Login Test with correct password", func(t *testing.T) {
@@ -28,9 +31,9 @@ func TestLoginHandler(test *testing.T) {
 		response := httptest.NewRecorder()
 		Router.ServeHTTP(response, request)
 		if response.Code != http.StatusOK {
-			t.Errorf("Invalid response code: %s", response.Code)
+			t.Errorf("Invalid response code: %d", response.Code)
 		}
-		json.NewDecoder(response.Body).Decode(loginResponse)
+		json.NewDecoder(response.Body).Decode(&loginResponse)
 		AuthToken = loginResponse.Token
 	})
 
@@ -41,7 +44,7 @@ func TestLoginHandler(test *testing.T) {
 		response := httptest.NewRecorder()
 		Router.ServeHTTP(response, request)
 		if response.Code != http.StatusUnauthorized {
-			t.Errorf("Invalid response code: %s", response.Code)
+			t.Errorf("Invalid response code: %d", response.Code)
 		}
 	})
 
@@ -52,7 +55,7 @@ func TestLoginHandler(test *testing.T) {
 		response := httptest.NewRecorder()
 		Router.ServeHTTP(response, request)
 		if response.Code != http.StatusUnauthorized {
-			t.Errorf("Invalid response code: %s", response.Code)
+			t.Errorf("Invalid response code: %d", response.Code)
 		}
 	})
 }
