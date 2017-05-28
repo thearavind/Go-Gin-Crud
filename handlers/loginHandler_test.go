@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/aravind741/Go-Gin-Crud/models"
-	"github.com/aravind741/Go-Gin-Crud/router/route_provider"
+	"github.com/aravind741/Go-Gin-Crud/provider"
 )
 
 type LoginResponse struct {
