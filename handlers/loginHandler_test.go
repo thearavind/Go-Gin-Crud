@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/aravind741/Go-Gin-Crud/models"
-	"github.com/aravind741/Go-Gin-Crud/provider"
+	"github.com/gin-gonic/gin"
 )
 
 type LoginResponse struct {
@@ -19,9 +19,24 @@ type LoginResponse struct {
 }
 
 var AuthToken string
-var Router = provider.ProvideRouter()
-var orM = models.GetOrmObject()
+var Router = getMainEngine()
 
+//
+func getMainEngine() *gin.Engine {
+	models.ConnectToDb()
+	httpRouter := gin.New()
+	httpRouter.Use(gin.Logger())
+	httpRouter.Use(gin.Recovery())
+	ORM = models.GetOrmObject()
+	httpRouter.POST("/api/users/login", LoginHandler)
+	httpRouter.POST("/api/users", RegistrationHandler)
+	RequireToken := httpRouter.Group("/")
+	RequireToken.Use(TokenValidator())
+	{
+		RequireToken.GET("/api/user", FetchUser)
+	}
+	return httpRouter
+}
 func TestLoginHandler(test *testing.T) {
 	test.Run("Login Test with correct password", func(t *testing.T) {
 		loginResponse := LoginResponse{}
