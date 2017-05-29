@@ -43,7 +43,7 @@ func TestRegistrationHandler(test *testing.T) {
 			t.Errorf("Failed to decode the json response %s", err)
 		} else {
 			data := models.Users{UserId: regResponse.UserId}
-			if _, err := orM.Delete(&data); err != nil {
+			if _, err := ORM.Delete(&data); err != nil {
 				t.Errorf("Failed to delete the new user from the DB %s", err)
 			}
 		}
